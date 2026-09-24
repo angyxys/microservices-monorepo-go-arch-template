@@ -1,0 +1,33 @@
+syntax = "proto3";
+package users;
+
+option go_package = "./internal/pb";
+
+
+import "google/api/annotations.proto";
+import "buf/validate/validate.proto";
+
+service UserService {
+  rpc Create(UserCreateDto) returns (UserCreatedDto) {
+    option (google.api.http) = {
+      post: "/v1/users"
+      body: "*"
+    };
+  }
+}
+
+message UserCreateDto {
+  string name = 1 [
+    (buf.validate.field).required = true
+  ];
+  string username = 2 [
+    (buf.validate.field).required = true
+  ];
+  string password= 3 [
+    (buf.validate.field).string.min_len = 6
+  ];
+}
+
+message UserCreatedDto {
+  string id = 1;
+}
