@@ -11,10 +11,26 @@ The project is segregated into reusable shared packages and isolated business do
 
 ## Prerequisites
 
-Ensure you have the following toolchains installed locally before working on this repository:
-
+### 1. Core Toolchains
+Ensure you have the following basic tools installed and available in your system path:
 * Go 1.22 or higher (with Workspace support enabled)
 * Buf CLI toolchain (for Protocol Buffer management and dependency resolution)
+
+### 2. Required Compilation Plugins
+To generate the Go source files, gRPC interfaces, and REST reverse-proxies via `buf generate`, you must install the following three plugins into your system binaries folder (`$GOPATH/bin` or `%GOPATH%\bin`):
+
+```bash
+# 1. Standard Protocol Buffer Go generator (creates .pb.go structs)
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+# 2. gRPC Go generator (creates _grpc.pb.go server and client interfaces)
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+# 3. gRPC-Gateway reverse proxy generator (creates .pb.gw.go HTTP routers)
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+```
+
+*Note: Ensure your Go bin directory is correctly appended to your operating system's global `PATH` variable environment array so the Buf CLI toolchain can locate and execute the binary files.*
 
 ## Workspace Architecture
 
