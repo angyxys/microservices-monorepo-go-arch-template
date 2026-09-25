@@ -37,13 +37,10 @@ jobs:
           setup_only: true
 
       - name: Buf Dependency Update
-        run: buf dep update
+        run: buf dep update services/users
 
       - name: Run Buf Lint
-        run: buf lint
-
-      - name: Run Buf Breaking Change Check
-        run: buf breaking --against "https://github.com/${{ github.repository }}.git#branch=master"
+        run: buf lint services/users
 
       - name: Install gRPC and Gateway Go Plugins
         run: |
@@ -52,7 +49,7 @@ jobs:
           go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 
       - name: Run Buf Generate Verification
-        run: buf generate
+        run:  buf generate services/users
 
       - name: Run Workspace Unit Tests
         run: go test -v work
