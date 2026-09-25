@@ -36,22 +36,20 @@ jobs:
         with:
           setup_only: true
 
+      - name: Buf Dependency Update
+        run: buf dep update
+
+      - name: Run Buf Lint
+        run: buf lint
+
+      - name: Run Buf Breaking Change Check
+        run: buf breaking --against "https://github.com/${{ github.repository }}.git#branch=master"
+
       - name: Install gRPC and Gateway Go Plugins
         run: |
           go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
           go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
-
-      - name: Buf Lint
-        uses: bufbuild/buf-lint-action@v1
-
-      - name: Buf Breaking Change Check
-        uses: bufbuild/buf-breaking-action@v1
-        with:
-          against: 'https://github.com{{ github.repository }}.git#branch=master'
-
-      - name: Buf Dependency Update
-        run: buf dep update
 
       - name: Run Buf Generate Verification
         run: buf generate
