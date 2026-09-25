@@ -10,7 +10,7 @@ import "buf/validate/validate.proto";
 service UserService {
   rpc Create(UserCreateDto) returns (UserCreatedDto) {
     option (google.api.http) = {
-      post: "/v1/users"
+      post: "/v1/api/users"
       body: "*"
     };
   }

@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: api_gateway_central
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    profiles: ["production"]
+
+  users-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: services/users/Dockerfile
+    container_name: users_services_dev
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    environment:
+      - ENV=development
+      - PORT=50051
+      - GATEWAY_PORT=8080
+    restart: always
+
+  users-prod:
+    profiles: ["production"]
+    build:
+      context: .
+      dockerfile: services/users/Dockerfile
+    environment:
+      - ENV=production
+      - PORT=50051
+      - GATEWAY_PORT=8080
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.users.rule=PathPrefix(`/v1/api/users`)"
+      - "traefik.http.routers.users.entrypoints=web"
+      - "traefik.http.services.users.loadbalancer.server.port=8080"
+    depends_on:
+      - traefik

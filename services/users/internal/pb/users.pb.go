@@ -137,9 +137,9 @@ const file_users_proto_rawDesc = "" +
 	"\busername\x18\x02 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\busername\x12#\n" +
 	"\bpassword\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x06R\bpassword\" \n" +
 	"\x0eUserCreatedDto\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id2Z\n" +
-	"\vUserService\x12K\n" +
-	"\x06Create\x12\x14.users.UserCreateDto\x1a\x15.users.UserCreatedDto\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/usersBZ\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id2^\n" +
+	"\vUserService\x12O\n" +
+	"\x06Create\x12\x14.users.UserCreateDto\x1a\x15.users.UserCreatedDto\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/api/usersBZ\n" +
 	"\tcom.usersB\n" +
 	"UsersProtoP\x01Z\r./internal/pb\xa2\x02\x03UXX\xaa\x02\x05Users\xca\x02\x05Users\xe2\x02\x11Users\\GPBMetadata\xea\x02\x05Usersb\x06proto3"
 
