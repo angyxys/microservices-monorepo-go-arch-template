@@ -1,28 +1,26 @@
-name: Master CI
+name: Development CI
 
 on:
   push:
     branches:
-      - master
+      - dev
   pull_request:
     branches:
-      - master
+      - dev
 
 jobs:
-  production-pipeline:
-    name: Build, Lint and Test
+  validate-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Go Runtime
         uses: actions/setup-go@v5
         with:
-          go-version: '1.26'
+          go-version: '1.23' 
           cache: true
 
       - name: Initialize Go Workspace
@@ -31,16 +29,11 @@ jobs:
           go work use ./pkg/xerrors
           go work use ./services/users
 
-      - name: Set up Buf CLI
+      - name: Run Buf Integrated Linting
         uses: bufbuild/buf-action@v1
         with:
-          setup_only: true
-
-      - name: Buf Dependency Update
-        run: buf dep update services/users
-
-      - name: Run Buf Lint
-        run: buf lint services/users
+          input: services/users
+          breaking: false
 
       - name: Install gRPC and Gateway Go Plugins
         run: |
@@ -49,7 +42,7 @@ jobs:
           go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 
       - name: Run Buf Generate Verification
-        run:  buf generate services/users
+        run: buf generate services/users
 
       - name: Run Workspace Unit Tests
         run: go test -v work

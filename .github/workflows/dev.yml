@@ -20,7 +20,7 @@ jobs:
       - name: Set up Go Runtime
         uses: actions/setup-go@v5
         with:
-          go-version: '1.26' 
+          go-version: '1.23' 
           cache: true
 
       - name: Initialize Go Workspace
@@ -29,19 +29,20 @@ jobs:
           go work use ./pkg/xerrors
           go work use ./services/users
 
-      - name: Set up Buf CLI
+      - name: Run Buf Integrated Linting
         uses: bufbuild/buf-action@v1
         with:
-          setup_only: true
+          input: services/users
+          breaking: false
 
-      - name: Buf Dependency Update
-        run: buf dep update
-
-      - name: Run Buf Lint
-        run: buf lint
+      - name: Install gRPC and Gateway Go Plugins
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+          go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 
       - name: Run Buf Generate Verification
-        run: buf generate
+        run: buf generate services/users
 
       - name: Run Workspace Unit Tests
         run: go test -v work
